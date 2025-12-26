@@ -1,0 +1,14 @@
+FROM node:20-alpine
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+
+RUN npm rebuild esbuild
+
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host", "--port", "5173"]
